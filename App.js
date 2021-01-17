@@ -11,10 +11,20 @@ export default class App extends React.Component{
   constructor(props){
     super(props);
     this.state={
-        city:""
-    }
+        city:"",
+        data:[],
+        icon:"",
+        city_display:"",
+        desc:"",
+        main:"",
+        humidity:"",
+        pressure:"",
+        visibility:""
+      }
   }
-
+  fetch_weather=()=>{
+    fetch("https://")
+  }
   render(){
   return (
     <SafeAreaView style={styles.container}>
@@ -27,9 +37,14 @@ export default class App extends React.Component{
           placeholderTextColor="#FFF" 
           styles={styles.searchbox} 
           onChangeText={(text)=>this.setState({city:text})}/>
-          <TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
             <Icon name="search1" size={24} color="#FFF" />
           </TouchableOpacity>
+        </View>
+        <View style={styles.appboxmain}>
+          <View style={styles.HolderView}>
+            <Image source={{}} style={styles.WeatherImage}/>
+          </View>
         </View>
 
         </ImageBackground>
@@ -63,5 +78,28 @@ const styles = StyleSheet.create({
     justifyContent:"center",
     alignItems:"center",
     flexDirection:"row"
+  },
+  button:{
+    marginLeft:"%5",
+    height:"35%",
+    width:"8%",
+    justifyContent:"center",
+    alignItems:"center"
+  },
+  appboxmain:{
+    height:"30%",
+    width:"100%",
+    justifyContent:"center",
+    alignItems:"center",
+    flexDirection:"row"
+  },
+  HolderView:{
+    height:"80%",
+    width:"90%",
+    backgroundColor:"rgba(255,255,255,0.3)",
+    borderRadius:15,
+    alignItems:"center",
+    flexDirection:"row"
+
   }
 })

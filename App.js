@@ -23,7 +23,18 @@ export default class App extends React.Component{
       }
   }
   fetch_weather=()=>{
-    fetch("https://")
+    fetch("https://api.openweathermap.org/data/2.5/weather?q=Pune&appid=a8da961d4f3fb1faeee70599f53e9e82")
+    .then((responce)=> responce.json())
+    .then((json=>{
+      this.setState({data:json})
+      this.setState({ temp : (json.main.temp-303.58).toFixed(2)+" c"})
+      this.setState({city_display : json.name})
+      this.setState({icon : json.weather[0].icon})
+      this.setState({main : json.weather[0].main})
+      this.setState({humidity : json.main.humidity+ "%"})
+      this.setState({pressure : json.main.pressure+ "hPa"})
+      this.setState({visibility : (json.main.visibility/1000).toFixed(2)+ "Km"})
+    })).catch((error)=> console.error(error))
   }
   render(){
   return (
@@ -43,7 +54,7 @@ export default class App extends React.Component{
         </View>
         <View style={styles.appboxmain}>
           <View style={styles.HolderView}>
-            <Image source={{}} style={styles.WeatherImage}/>
+            <Image source={{uri:"http://openweathermap.org/img/wn"+this.state.icon+"@2x.png"}} style={styles.Weather_Image}/>
           </View>
         </View>
 
@@ -100,6 +111,9 @@ const styles = StyleSheet.create({
     borderRadius:15,
     alignItems:"center",
     flexDirection:"row"
-
+  },
+  Weather_Image:{
+    height: "80%",
+    width: "50%"
   }
 })

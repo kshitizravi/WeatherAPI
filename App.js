@@ -1,7 +1,7 @@
 import React from 'react';
 import { SafeAreaView,StyleSheet, Text, View, Dimensions,Image,ImageBackground,TouchableOpacity, TextInput } from 'react-native';
+import Icon from 'react-native-vector-icons/AntDesign'
 
-import Icon from "react-native-vector-icons/ant"
 
 const Dev_Height = Dimensions.get('window').height
 const Dev_Width = Dimensions.get('window').width
@@ -11,7 +11,7 @@ export default class App extends React.Component{
   constructor(props){
     super(props);
     this.state={
-        city:"",
+        city:"Pune",
         data:[],
         icon:"",
         city_display:"",
@@ -19,23 +19,23 @@ export default class App extends React.Component{
         main:"",
         humidity:"",
         pressure:"",
-        visibility:""
+        Wind:""
       }
-      this.fetch_weather()
+    this.fetch_weather()
   }
   fetch_weather=()=>{
-    fetch("https://api.openweathermap.org/data/2.5/weather?q=Pune&appid=a8da961d4f3fb1faeee70599f53e9e82")
-    .then((responce)=> responce.json())
+    fetch("https://api.openweathermap.org/data/2.5/weather?q="+this.state.city+"&appid=a8da961d4f3fb1faeee70599f53e9e82&units=Metric")
+    .then((response)=> response.json())
     .then((json=>{
       this.setState({data:json})
-      this.setState({ temp : (json.main.temp-303.58).toFixed(2)+" c"})
-      this.setState({desc: json.weather[0].description})
+      this.setState({temp : (json.main.temp).toFixed(2)+"°C"})
+      this.setState({desc : json.weather[0].description})
       this.setState({city_display : json.name})
       this.setState({icon : json.weather[0].icon})
       this.setState({main : json.weather[0].main})
       this.setState({humidity : json.main.humidity+ "%"})
-      this.setState({pressure : json.main.pressure+ "hPa"})
-      this.setState({visibility : (json.main.visibility/1000).toFixed(2)+ "Km"})
+      this.setState({pressure : json.main.pressure+ " hPa"})
+      this.setState({Wind : (json.wind.speed).toFixed(2)+ " Km"})
     })).catch((error)=> console.error(error))
   }
   render(){
@@ -49,14 +49,14 @@ export default class App extends React.Component{
           placeholder="Search" 
           placeholderTextColor="#FFF" 
           styles={styles.searchbox} 
-          onChangeText={(text)=>this.setState({city:text})}/>
-          <TouchableOpacity style={styles.button} onPress={this.fetch_weather}>
-            <Icon name="search1" size={24} color="#FFF" />
+          onChangeText={(text)=>this.setState({city:text})}></TextInput>
+          <TouchableOpacity style={styles.button} onPress={this.fetch_weather()}>
+            <Icon name="search1" size={20} color="#FFF" />
           </TouchableOpacity>
         </View>
         <View style={styles.appboxmain}>
           <View style={styles.HolderView}>
-            <Image source={{uri:"http://openweathermap.org/img/wn"+this.state.icon+"@2x.png"}} style={styles.Weather_Image}/>
+            <Image source={{uri:"http://openweathermap.org/img/wn"+this.state.icon+"@2x.png"} } style={styles.Weather_Image} />
             <View>
               <Text style={styles.temp_text}>{this.state.temp}</Text>
               <Text style={styles.city_text}>{this.state.city_display}</Text>
@@ -67,9 +67,9 @@ export default class App extends React.Component{
           <View style={styles.Info_Holder}>
             <Text style={styles.weather_text}>{this.state.main}</Text>
             <Text style={styles.desc_text}>{this.state.desc}</Text>
-            <Text style={styles.humidity_text}>{this.state.humidity}</Text>
-            <Text style={styles.other_text}>{this.state.pressure}</Text>
-            <Text style={styles.other_text}>{this.state.visibility}</Text>
+            <Text style={styles.humidity_text}>Humidity: {this.state.humidity}</Text>
+            <Text style={styles.other_text}>Wind: {this.state.Wind}</Text>
+            <Text style={styles.other_text}>Atmospheric Pressure: {this.state.pressure}</Text>
           </View> 
           </View>
         
@@ -81,12 +81,11 @@ export default class App extends React.Component{
 
 const styles = StyleSheet.create({
   container: {
-    height:Dev_Height,
-    width:Dev_Width
+   flex:1
   },
   Image_Background_Style:{
-    height:100,
-    width:100
+    height:"100%",
+    width:"100%",
   },
   searchbox:{
     height:"35%",
@@ -106,7 +105,7 @@ const styles = StyleSheet.create({
     flexDirection:"row"
   },
   button:{
-    marginLeft:"%5",
+    marginLeft:"5%",
     height:"35%",
     width:"8%",
     justifyContent:"center",
@@ -128,7 +127,7 @@ const styles = StyleSheet.create({
     flexDirection:"row"
   },
   Weather_Image:{
-    height: "80%",
+    height: "50%",
     width: "50%"
   },
   temperature_text:{
